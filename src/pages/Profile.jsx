@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, getStorage, list, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import {updateUserStart,updateUserSuccess,updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart, signOutUserFailure, signOutUserSuccess} from '../redux/user/userSlice'
 import { useDispatch } from 'react-redux';
@@ -18,7 +18,7 @@ function Profile() {
   const [updateSuccess,setUpdateSuccess] = useState(false)
   const [showListingError,setShowListingError] = useState(false)
   const [userListings,setUserListings] = useState([])
-  console.log(formData)
+  // console.log(formData)
 
 
   // console.log(formData)
@@ -141,11 +141,30 @@ function Profile() {
         setShowListingError(true)
         return
       }
-      setUserListings(true)
+      setUserListings(data)
     } catch (error) {
-      
+      setShowListingError(true)
     }
   }
+
+
+    const handleListingDelete = async(listingId) =>{
+      try {
+        const res = await fetch(`/api/listing/delete/${listingId}`,{
+          method:'DELETE',
+        })
+        const data = await res.json()
+        if(data.success === false){
+          console.log(data.message)
+          return
+        }
+
+        setUserListings((prev)=>prev.filter((listing)=>listing._id !== listingId))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -209,7 +228,7 @@ function Profile() {
                    <p>{listing.name}</p>
                   </Link>
                   <div className="flex flex-col items-center">
-                   <button className='text-red-700 uppercase'>Delete</button>
+                   <button onClick={()=>handleListingDelete(listing._id)} className='text-red-700 uppercase'>Delete</button>
                    <button className='text-green-700 uppercase'>Edit</button>
  
                   </div>
