@@ -205,12 +205,12 @@ const handleSubmit = async(e) =>{
               </div>
               <div className="flex flex-wrap gap-6">
                 <div className="flex items-center gap-2">
-                  <input type="number" id='bathrooms' min='1' max='10'required
+                  <input type="number" id='bedrooms' min='1' max='10'required
                   className='p-3 border border-gray-300 rounded-lg' onChange={handleChange} value={formData.bedrooms} />
                   <p>Beds</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <input type="number" id='bedrooms' min='1' max='10'required
+                  <input type="number" id='bathrooms' min='1' max='10'required
                   className='p-3 border border-gray-300 rounded-lg' onChange={handleChange} value={formData.bathrooms} />
                   <p>Bathrooms</p>
                 </div>
@@ -219,6 +219,9 @@ const handleSubmit = async(e) =>{
                   className='p-3 border border-gray-300 rounded-lg' onChange={handleChange} value={formData.regularPrice} />
                  <div className="flex flex-col items-center">
                  <p>Regular Price</p>
+                 {formData.type === 'rent' && (
+                  <span className='text-xs'>($ / month)</span>
+                )}
                  <span className='text-xs'>($ / month)</span>
                  </div>
                   
@@ -229,7 +232,10 @@ const handleSubmit = async(e) =>{
                   className='p-3 border border-gray-300 rounded-lg' onChange={handleChange} value={formData.discountPrice} />
                   <div className="flex flex-col items-center">
                   <p>Discounted Price</p>
-                  <span className='text-xs'>($ / month)</span>
+                  {formData.type === 'rent' && (
+                    <span className='text-xs'>($ / month)</span>
+                  )}
+
 
                   </div>
                 </div>
